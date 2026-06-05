@@ -80,7 +80,7 @@ export default function DashboardView() {
   }
 
   return (
-    <div style={{ overflowY: 'auto', padding: '14px 14px 24px' }}>
+    <div style={{ overflowY: 'auto', height: '100%', padding: '14px 14px 24px', boxSizing: 'border-box' }}>
 
       {/* ① 요약 카드 2×2 */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>

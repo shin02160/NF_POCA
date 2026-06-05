@@ -20,16 +20,14 @@ export default function GridItem({ card, inPhotobook, onAdd, onRemove, onDetail 
         style={{
           position: 'relative',
           width: '100%',
-          paddingBottom: '150%',
+          aspectRatio: '2/3',
           borderRadius: 9,
           overflow: 'hidden',
           outline: inPhotobook ? '2.5px solid var(--accent)' : 'none',
           outlineOffset: -2,
         }}
       >
-        <div style={{ position: 'absolute', inset: 0 }}>
-          <PocaImage src={card.imageUrl} memberName={memberLabel} radius={0} showNameOverlay />
-        </div>
+        <PocaImage src={card.imageUrl} memberName={memberLabel} radius={0} showNameOverlay fillParent />
 
         {/* 상태 pill */}
         {card.status && (

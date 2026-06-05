@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useAppStore } from '@/store/useAppStore';
 
 function ChevIcon() {
@@ -27,12 +27,20 @@ interface DropdownProps {
 
 function Dropdown({ label, value, options, onChange }: DropdownProps) {
   const [open, setOpen] = useState(false);
+  const [rect, setRect] = useState<DOMRect | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
   const active = !!value;
+
+  const handleOpen = () => {
+    if (btnRef.current) setRect(btnRef.current.getBoundingClientRect());
+    setOpen((o) => !o);
+  };
 
   return (
     <div style={{ position: 'relative', flexShrink: 0 }}>
       <button
-        onClick={() => setOpen((o) => !o)}
+        ref={btnRef}
+        onClick={handleOpen}
         style={{
           height: 30,
           padding: '0 8px',
@@ -52,23 +60,22 @@ function Dropdown({ label, value, options, onChange }: DropdownProps) {
         {value ?? label}
         <ChevIcon />
       </button>
-      {open && (
+      {open && rect && (
         <>
           <div
-            style={{ position: 'fixed', inset: 0, zIndex: 10 }}
+            style={{ position: 'fixed', inset: 0, zIndex: 100 }}
             onClick={() => setOpen(false)}
           />
           <div
             style={{
-              position: 'absolute',
-              top: '100%',
-              left: 0,
-              marginTop: 4,
+              position: 'fixed',
+              top: rect.bottom + 4,
+              left: rect.left,
               background: 'var(--surface)',
               border: '1px solid var(--border)',
               borderRadius: 9,
               boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-              zIndex: 20,
+              zIndex: 101,
               minWidth: 120,
               maxHeight: 220,
               overflowY: 'auto',

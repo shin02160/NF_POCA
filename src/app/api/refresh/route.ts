@@ -120,20 +120,21 @@ export async function POST() {
 
     // 기존 image_url 조회 (이미 Supabase Storage에 올라간 것은 재업로드 안 함)
     const existingRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/poca_cards?select=id,image_url`,
+      `${SUPABASE_URL}/rest/v1/poca_cards?select=id,image_url,status`,
       { headers: sbHeaders }
     );
-    const existingRows: { id: string; image_url: string | null }[] = existingRes.ok
+    const existingRows: { id: string; image_url: string | null; status: string | null }[] = existingRes.ok
       ? await existingRes.json()
       : [];
-    const existingMap = new Map(existingRows.map((r) => [r.id, r.image_url]));
+    const existingMap = new Map(existingRows.map((r) => [r.id, { image_url: r.image_url, status: r.status }]));
 
     const batch: any[] = [];
     let newImages = 0;
 
     for (const card of notionCards) {
       const { _notionImageUrl, ...rest } = card;
-      let image_url = existingMap.get(card.id) ?? null;
+      const existing = existingMap.get(card.id);
+      let image_url = existing?.image_url ?? null;
 
       // Supabase Storage URL이 없고 Notion URL이 있으면 업로드
       if (!image_url && _notionImageUrl) {
@@ -141,7 +142,12 @@ export async function POST() {
         if (image_url) newImages++;
       }
 
-      batch.push({ ...rest, image_url });
+      const status = rest.status ?? existing?.status ?? null;
+      const row: any = { ...rest, image_url, status };
+      // null 값은 upsert 페이로드에서 제외 (기존 DB 값 보존)
+      Object.keys(row).forEach((k) => { if (row[k] === null) delete row[k]; });
+      row.id = card.id; // id는 항상 포함
+      batch.push(row);
 
       if (batch.length === 20) {
         await upsertBatch(batch.splice(0));

@@ -55,13 +55,15 @@ export default function Pagination({ page, totalPages, onChange }: Props) {
       flexShrink: 0,
       background: 'var(--bg)',
     }}>
-      {btn('←', page - 1, false, page === 1)}
+      {btn('«', 1,           false, page === 1)}
+      {btn('←', page - 1,   false, page === 1)}
       {pages.map((p, i) =>
         p === '…'
           ? <span key={`ellipsis-${i}`} style={{ width: 28, textAlign: 'center', fontSize: 12, color: 'var(--text-dim)' }}>…</span>
           : btn(p, p as number, p === page)
       )}
-      {btn('→', page + 1, false, page === totalPages)}
+      {btn('→', page + 1,        false, page === totalPages)}
+      {btn('»', totalPages,      false, page === totalPages)}
     </div>
   );
 }
