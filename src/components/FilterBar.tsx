@@ -70,13 +70,14 @@ function Dropdown({ label, value, options, onChange }: DropdownProps) {
             style={{
               position: 'fixed',
               top: rect.bottom + 4,
-              left: rect.left,
+              left: Math.min(rect.left, (typeof window !== 'undefined' ? window.innerWidth : 480) - 140),
               background: 'var(--surface)',
               border: '1px solid var(--border)',
               borderRadius: 9,
               boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
               zIndex: 101,
               minWidth: 120,
+              maxWidth: 200,
               maxHeight: 220,
               overflowY: 'auto',
             }}
@@ -131,10 +132,11 @@ export default function FilterBar() {
   const setViewMode = useAppStore((s) => s.setViewMode);
   const [showSearch, setShowSearch] = useState(false);
 
-  const memberOptions = useMemo(() =>
-    [...new Set(allCards.flatMap((c) => c.members))].filter(Boolean).sort(),
-    [allCards]
-  );
+  const MEMBER_ORDER = ['승협', '훈', '재현', '회승', '동성', '단체'];
+  const memberOptions = useMemo(() => {
+    const fromData = [...new Set(allCards.flatMap((c) => c.members))].filter(Boolean);
+    return [...MEMBER_ORDER.filter((m) => fromData.includes(m)), ...fromData.filter((m) => !MEMBER_ORDER.includes(m))];
+  }, [allCards]);
   const cat1Options = useMemo(() =>
     [...new Set(allCards.map((c) => c.cat1).filter(Boolean) as string[])].sort(),
     [allCards]

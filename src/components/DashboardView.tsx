@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 
 function StatCard({ value, unit, label, bg, color }: { value: string | number; unit: string; label: string; bg: string; color: string }) {
   return (
-    <div style={{ background: bg, borderRadius: 14, padding: '16px', flex: 1 }}>
+    <div style={{ background: bg, borderRadius: 12, padding: '12px 14px', flex: 1 }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
-        <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, color, lineHeight: 1 }}>{value}</span>
-        <span style={{ fontSize: 13, fontWeight: 700, color, opacity: 0.6 }}>{unit}</span>
+        <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, color, lineHeight: 1 }}>{value}</span>
+        <span style={{ fontSize: 12, fontWeight: 700, color, opacity: 0.6 }}>{unit}</span>
       </div>
-      <p style={{ margin: '4px 0 0', fontSize: 12, color, opacity: 0.7, fontWeight: 500 }}>{label}</p>
+      <p style={{ margin: '3px 0 0', fontSize: 11, color, opacity: 0.7, fontWeight: 500 }}>{label}</p>
     </div>
   );
 }
@@ -83,7 +83,7 @@ export default function DashboardView() {
     <div style={{ overflowY: 'auto', height: '100%', padding: '14px 14px 24px', boxSizing: 'border-box' }}>
 
       {/* ① 요약 카드 2×2 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7, marginBottom: 10 }}>
         <StatCard value={stats.total} unit="장" label="총 포카" bg="#f5f3ff" color="#6d28d9" />
         <StatCard value={stats.memberCount} unit="명" label="등록 멤버" bg="#fffbeb" color="#d97706" />
         <StatCard value={stats.originCount} unit="건" label="등록 출처" bg="#eff6ff" color="#2563eb" />
@@ -174,7 +174,7 @@ export default function DashboardView() {
       {stats.recentPocas.length > 0 && (
         <div style={{ background: 'var(--surface)', borderRadius: 14, padding: '14px 16px 16px', marginBottom: 10 }}>
           <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>최근 추가 포카</p>
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 2 }}>
+          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4, paddingRight: 16 }}>
             {stats.recentPocas.map((card) => {
               const initials = card.members[0]?.slice(0, 2) ?? '??';
               return (
