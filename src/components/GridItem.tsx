@@ -18,21 +18,21 @@ export default function GridItem({ card, inPhotobook, onAdd, onRemove, onDetail 
 
   return (
     <div onClick={onDetail} style={{ cursor: 'pointer', width: '100%' }}>
-      {/* 이미지 래퍼: overflow:hidden은 border-radius 클리핑만 담당 */}
+      {/* 이미지 래퍼: 컨테이너에서 3:4 비율 고정 */}
       <div style={{
         position: 'relative',
         width: '100%',
+        aspectRatio: '3 / 4',
         borderRadius: 9,
         overflow: 'hidden',
         outline: inPhotobook ? '2.5px solid var(--accent)' : 'none',
         outlineOffset: -2,
+        background: '#dbeafe',
       }}>
         {showFallback ? (
-          /* 폴백: aspect-ratio를 div 자체에 적용 */
           <div style={{
             width: '100%',
-            aspectRatio: '3 / 4',
-            background: '#dbeafe',
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -44,16 +44,16 @@ export default function GridItem({ card, inPhotobook, onAdd, onRemove, onDetail 
             <p style={{ margin: 0, fontSize: 7, color: '#3b82f6', fontWeight: 500, textAlign: 'center', lineHeight: 1.4 }}>이미지<br />준비중</p>
           </div>
         ) : (
-          /* img 자체에 aspect-ratio 적용 — 절대 위치 불필요 */
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={card.imageUrl!}
             alt={memberLabel}
             onError={() => setImgError(true)}
             style={{
-              display: 'block',
+              position: 'absolute',
+              inset: 0,
               width: '100%',
-              aspectRatio: '3 / 4',
+              height: '100%',
               objectFit: 'cover',
               objectPosition: 'center top',
             }}
